@@ -1,0 +1,8 @@
+stuff to install
+
+commands are: 
+
+conda install numpy
+conda install pandas
+conda install matplotlib
+
