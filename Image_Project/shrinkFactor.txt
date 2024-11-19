@@ -1,0 +1,135 @@
+// First Challenege- Step 3-4
+float shrinkFactor;
+int middle = newFriend.height / 2;
+for (int r = 0; r < newFriend.height; ++r)
+
+if (r <= middle)
+{
+    shrinkFactor = 0.5f + (float)r / middle * 0.5f; // 0.5 to 1.0
+}
+else
+{
+    shrinkFactor = 1.0f - (float)(r - middle) / middle * 0.5f; // 1.0 to 0.5
+}
+
+//Second Challenege- Step 3-4
+float shrinkFactor;
+int middle = newFriend.height / 2;
+for (int r = 0; r < newFriend.height; ++r)
+
+if (r <= middle)
+{
+    shrinkFactor = 0.0f + (float)r / middle * 1.0f;
+}
+else
+{
+    shrinkFactor = 1.0f - (float)(r - middle) / middle * 1.0f;
+}
+
+//Code:
+using System;
+using System.Reflection;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Microsoft.Extensions.FileProviders;
+
+internal class Expand
+{
+    // this comment is to force a rebuild
+    const int Red = 2;
+    const int Grn = 1;
+    const int Blu = 0;
+
+    public Window win;
+
+    WriteableImage oldFriend;
+    WriteableImage newFriend;
+    public Expand()
+    {
+        oldFriend = new WriteableImage("OldFriend.png");
+        newFriend = new WriteableImage("OldFriend.png");
+
+        win = new Window
+        {
+            Title = "Expand v1.0",
+            Height = oldFriend.height,
+            Width = oldFriend.width,
+            Background = Brushes.Magenta,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen,
+        };
+
+        win.Content = newFriend.img;
+        win.PointerPressed += Process;
+        win.Show();
+    }
+
+    void Process(object s, RoutedEventArgs e)
+    {
+        float shrinkFactor;
+        int middle = newFriend.height / 2;
+        for (int r = 0; r < newFriend.height; ++r)
+        {
+            // Step 1, use shrinkFactor = 1:
+
+            // float shrinkFactor = 1;
+
+            // Step 2, try shrinkFactor = 0.5f:
+
+            // float shrinkFactor = 0.5f;
+
+            // Step 3, make shrinkFactor change for each row of pixels:
+            
+            // float shrinkFactor = 1 - (float)r / newFriend.height;
+
+            // First Challenge (commented out)
+
+            /*if (r <= middle)
+            {
+                shrinkFactor = 0.5f + (float)r / middle * 0.5f; // 0.5 to 1.0
+            }
+            else
+            {
+                shrinkFactor = 1.0f - (float)(r - middle) / middle * 0.5f; // 1.0 to 0.5
+            }
+            */
+            
+
+            // Second Challenge 
+
+            if (r <= middle)
+            {
+                shrinkFactor = 0.0f + (float)r / middle * 1.0f; 
+            }
+            else
+            {
+                shrinkFactor = 1.0f - (float)(r - middle) / middle * 1.0f;
+            }
+            
+
+
+            for (int c = 0; c < newFriend.width; ++c)
+            {
+                // What is the current column's distance, positive or negative,
+                // from the center of the input image?
+                float distance = c - oldFriend.width / 2f;
+
+                // Shrink the distance based on the shrinkFactor
+                float shrunkenDistance = shrinkFactor * distance;
+
+                // Add the shrunken distance to the center coordinate to get the
+                // coordinate of the pixel we want to copy (rounding, of course).
+                int cCopy = (int)(0.5f + oldFriend.width / 2 + shrunkenDistance);
+                
+                for (int p = 0; p < 3; ++p)
+                {
+                    newFriend[r, c, p] = oldFriend[r, cCopy, p];
+                }
+            }
+        }
+
+        newFriend.Update();
+    }
+}
+
